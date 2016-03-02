@@ -1,5 +1,8 @@
 # RedisTree
 RedisTree is a Laravel 5 package that provides an elegant web interface for the manipulation and heirarchical visualization of your data stored in Redis.
+
+<a href="https://cdn.rawgit.com/mmeyer2k/mmeyer2k.github.io/master/storage/redistree/screen1.png" target="_blank">Screenshot</a>
+
 ## Install
 ### Add to Composer
 ```
