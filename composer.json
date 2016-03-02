@@ -1,0 +1,12 @@
+{
+    "name": "mmeyer2k/redistree",
+    "description": "",
+    "keywords": [""],
+    "license": "MIT",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Mmeyer2k\\RedisTree\\": "src/"
+        }
+    }
+}
