@@ -18,3 +18,9 @@ To allow for full customization of the URL and security mechanisms employed, rou
 ```php
 \Route::controller('redistree', '\Mmeyer2k\RedisTree\RedisTreeController');
 ```
+
+## Features
+1. Ability to choose what characters represent keyspace separators.
+2. Toggleable prompting before destructive actions.
+3. Simple integration with existing Laravel 5 applications.
+4. Elegant and intuitive interface.
