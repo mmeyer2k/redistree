@@ -6,7 +6,7 @@ RedisTree is a Laravel 5 package that provides an elegant web interface for the 
 ## Install
 ### Add to Composer
 ```
-composer require mmeyer2k/redistree
+composer require "mmeyer2k/redistree=dev-master"
 ```
 ### Add Service Provider
 Add the following line into 'providers' array in `config/app.php`
