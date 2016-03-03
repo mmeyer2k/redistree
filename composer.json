@@ -1,7 +1,7 @@
 {
     "name": "mmeyer2k/redistree",
-    "description": "",
-    "keywords": [""],
+    "description": "A clean Redis web interface for Laravel 5",
+    "keywords": ["redis", "laravel"],
     "license": "MIT",
     "type": "project",
     "autoload": {
