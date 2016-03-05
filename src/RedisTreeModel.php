@@ -68,6 +68,15 @@ class RedisTreeModel
         return \config("redistree.$opt");
     }
 
+    public static function redisEscape($str)
+    {
+        foreach(['*', '\\'] as $char) {
+            $str = str_replace($char, "\\{$char}", $str);
+        }
+
+        return $str;
+    }
+
     public static function segments($path)
     {
         $separators = \config('redistree.separators');
