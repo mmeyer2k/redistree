@@ -22,7 +22,7 @@ class RedisTreeController extends \App\Http\Controllers\Controller
         }
 
         // Create escaped redis search string
-        $escaped = str_replace('*', '\\*', $path);
+        $escaped = RedisTreeModel::redisEscape($path);
 
         // Pull keys from redis matching search
         $keys = \Redis::keys("$escaped*");
