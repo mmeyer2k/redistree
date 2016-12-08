@@ -15,7 +15,7 @@ class RedisTreeController extends \App\Http\Controllers\Controller
     public function getIndex()
     {
         // Find filter path and decode it
-        $path = \Input::get('node');
+        $path = \Request::input('node');
         
         if ($path) {
             $path = hex2bin($path);
@@ -57,7 +57,7 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postDeleteKey()
     {
-        $key = \Input::get('key');
+        $key = \Request::input('key');
         \Redis::del($key);
     }
 
