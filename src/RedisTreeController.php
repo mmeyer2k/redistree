@@ -63,7 +63,7 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postDeleteNode()
     {
-        $node = \Input::get('node');
+        $node = \Request::input('node');
         foreach (\Redis::keys('*') as $key) {
             if (starts_with($key, $node)) {
                 \Redis::del($key);
@@ -73,7 +73,7 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postOptions()
     {
-        $opts = \Input::get('opts');
+        $opts = \Request::input('opts');
 
         if (!isset($opts['separators'])) {
             $opts['separators'] = [];
@@ -85,8 +85,8 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postOptionSet()
     {
-        $opt = \Input::get('opt');
-        $val = \Input::get('val');
+        $opt = \Request::input('opt');
+        $val = \Request::input('val');
         $ext = \Session::get('options');
         if (!is_array($ext)) {
             $ext = \config('redistree');
@@ -97,8 +97,8 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postWriteKey()
     {
-        $key = \Input::get('key');
-        $val = \Input::get('val');
+        $key = \Request::input('key');
+        $val = \Request::input('val');
 
         \Redis::set($key, $val);
     }
