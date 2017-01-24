@@ -16,7 +16,7 @@ Add the following line into the 'providers' array in `config/app.php`
 ### Add Routes
 To allow for full customization of the URL and security mechanisms employed, routing to the RedisTree controller is left to the developer. To serve the GUI from `/redistree` **without any kind of security**, add the following stub to your `routes.php` file
 ```php
-\Route::controller('redistree', '\Mmeyer2k\RedisTree\RedisTreeController');
+\Mmeyer2k\RedisTree\RedisTreeModel::registerRoutes();
 ```
 
 ## Features
