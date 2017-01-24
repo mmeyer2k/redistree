@@ -2,10 +2,22 @@
 
 namespace Mmeyer2k\RedisTree;
 
-use Mmeyer2k\RedisTree\RedisTreeModel;
-
 class RedisTreeModel
 {
+    public static function registerRoutes()
+    {
+        \Route::group(['prefix' => 'redistree'], function () {
+            $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
+            \Route::get('/', "$controller@getIndex");
+            \Route::get('about', "$controller@getAbout");
+            \Route::post('delete-node', "$controller@postDeleteNode");
+            \Route::post('delete-key', "$controller@postDeleteKey");
+            \Route::post('write-key', "$controller@postWriteKey");
+            \Route::post('set-option', "$controller@postOptionSet");
+            \Route::get('stats', "$controller@getStatistics");
+            \Route::get('options', "$controller@getOptions");
+        });
+    }
 
     public static function array2table($data)
     {
@@ -70,7 +82,7 @@ class RedisTreeModel
 
     public static function redisEscape($str)
     {
-        foreach(['*', '\\'] as $char) {
+        foreach (['*', '\\'] as $char) {
             $str = str_replace($char, "\\{$char}", $str);
         }
 
@@ -93,5 +105,4 @@ class RedisTreeModel
 
         return $segs;
     }
-
 }
