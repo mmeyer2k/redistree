@@ -4,18 +4,18 @@ namespace Mmeyer2k\RedisTree;
 
 class RedisTreeModel
 {
-    public static function registerRoutes()
+    public static function registerRoutes($prefix = 'redistree')
     {
-        \Route::group(['prefix' => 'redistree'], function () {
+        \Route::group(['prefix' => $prefix], function () {
             $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
             \Route::get('/', "$controller@getIndex");
             \Route::get('about', "$controller@getAbout");
+            \Route::get('stats', "$controller@getStatistics");
+            \Route::get('options', "$controller@getOptions");
             \Route::post('delete-node', "$controller@postDeleteNode");
             \Route::post('delete-key', "$controller@postDeleteKey");
             \Route::post('write-key', "$controller@postWriteKey");
             \Route::post('set-option', "$controller@postOptionSet");
-            \Route::get('stats', "$controller@getStatistics");
-            \Route::get('options', "$controller@getOptions");
         });
     }
 
