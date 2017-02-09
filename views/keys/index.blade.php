@@ -67,13 +67,16 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     @if (!RedisTreeModel::option('view_keys_only'))
-                        @if (\Redis::type($path . $key) === 'string')
+                        <?php
+                        $type = (string)\Redis::type($path . $key);
+                        ?>
+                        @if ($type === 'string')
                             <textarea
                                     placeholder="Key value"
                                     style="resize: vertical; height: 53px;"
                                     class="form-control monospace">{{ \Redis::get($path . $key) }}</textarea>
                         @else
-                            Non-string type.
+                            Non-string type ({!! $type !!}) not supported, yet.
                         @endif
                     @endif
                 </div>
