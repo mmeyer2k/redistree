@@ -101,7 +101,6 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
             }
             ?>
             @if (count($data) === 0)
-                ?>
                 <h3>
                     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
                     This keyspace is empty!
