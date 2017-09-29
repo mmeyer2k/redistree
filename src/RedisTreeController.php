@@ -69,7 +69,9 @@ class RedisTreeController extends \App\Http\Controllers\Controller
     public function postDeleteNode()
     {
         $node = \Request::input('node');
-        foreach (\Redis::keys('*') as $key) {
+        $c = \Redis::connection()->client();
+        $keys = new \Predis\Collection\Iterator\Keyspace($c, "*");
+        foreach ($keys as $key) {
             if (starts_with($key, $node)) {
                 \Redis::del($key);
             }
