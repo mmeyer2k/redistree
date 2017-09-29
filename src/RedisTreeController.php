@@ -25,7 +25,12 @@ class RedisTreeController extends \App\Http\Controllers\Controller
         $escaped = RedisTreeModel::redisEscape($path);
 
         // Pull keys from redis matching search
-        $keys = \Redis::keys("$escaped*");
+        $c = \Redis::connection()->client();
+        $k = new \Predis\Collection\Iterator\Keyspace($c, "$escaped*");
+        $keys = [];
+        foreach ($k as $key) {
+            $keys[] = $key;
+        }
 
         // Sort the keys
         sort($keys);
