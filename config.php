@@ -4,7 +4,7 @@ return [
     /*
      * An array of characters to use as default virtual "directory" separators.
      */
-    'separators' => ['\\', '/', ':', '-', '|', '+', '#'],
+    'separators' => ['\\', '/', ':', '|', '+', '#'],
     /*
      * Do not load each key's data when browsing.
      */
