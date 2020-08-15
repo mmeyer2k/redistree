@@ -42,7 +42,7 @@ class RedisTreeModel
         $out = [];
         foreach ($keys as $key) {
             $key = substr($key, strlen($path));
-            if (!str_contains($key, $seps)) {
+            if (!\Str::contains($key, $seps)) {
                 $out[] = $key;
                 continue;
             }
@@ -56,7 +56,7 @@ class RedisTreeModel
                 // To make sure this isnt a sub-key with a differnt kind
                 // of separator, we will test if the resulting relKey
                 // has a separator value still, if so skip
-                if (str_contains($nodes[0], $seps)) {
+                if (\Str::contains($nodes[0], $seps)) {
                     continue;
                 }
 
