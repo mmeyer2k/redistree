@@ -1,5 +1,6 @@
 # :deciduous_tree:RedisTree
-RedisTree is a Laravel 5 package that provides an elegant web interface for Redis. It helps you monitor your server statistics and explore your Redis key/value pairs hierarchically.
+RedisTree is a Laravel package that provides an elegant web interface for Redis.
+It assists you in monitoring your server statistics and exploring your Redis key hierarchically.
 
 <a href="SCREENSHOTS.md">Screenshots</a>
 
@@ -11,13 +12,17 @@ composer require "mmeyer2k/redistree:dev-master"
 ### Add Service Provider
 Add the following line into the 'providers' array in `config/app.php`
 ```php
-'Mmeyer2k\RedisTree\RedisTreeServiceProvider',
+Mmeyer2k\RedisTree\RedisTreeServiceProvider::class,
 ```
 ### Add Routes
-To allow for full customization of the URL and security mechanisms employed, routing to the RedisTree controller is left to the developer. To serve the GUI from `/redistree` **without any kind of security**, add the following stub to your `routes.php` file
+To allow for full customization of the URL and security mechanisms employed, routing to the RedisTree controller is left to the developer.
+To serve the GUI from `/redistree` **without any kind of security**, add the following stub to your `routes.php` file.
 ```php
 \Mmeyer2k\RedisTree\RedisTreeModel::registerRoutes();
 ```
+
+### Security
+Place the `registerRoutes()` within a route group to provide authentication flexibility.
 
 ## Features
 1. Ability to choose what characters represent keyspace separators.
