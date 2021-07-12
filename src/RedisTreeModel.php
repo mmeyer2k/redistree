@@ -4,24 +4,25 @@ namespace Mmeyer2k\RedisTree;
 
 class RedisTreeModel
 {
-    public static function registerRoutes($prefix = 'redistree')
+    public static function registerRoutes(string $prefix = 'redistree'): void
     {
         \Route::group(['prefix' => $prefix], function () {
-            $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
-            \Route::get('/', "$controller@getIndex");
-            \Route::get('about', "$controller@getAbout");
-            \Route::get('stats', "$controller@getStatistics");
-            \Route::get('options', "$controller@getOptions");
-            \Route::post('delete-node', "$controller@postDeleteNode");
-            \Route::post('delete-key', "$controller@postDeleteKey");
-            \Route::post('write-key', "$controller@postWriteKey");
-            \Route::post('set-option', "$controller@postOptionSet");
+            \Route::get('/', [RedisTreeController::class, "getIndex"])->name('mmeyer2k.redistree.index');
+            \Route::get('about', [RedisTreeController::class, "getAbout"]);
+            \Route::get('stats', [RedisTreeController::class, "getStatistics"]);
+            \Route::get('options', [RedisTreeController::class, "getOptions"])->name('mmeyer2k.redistree.options');
+            \Route::post('delete-node', [RedisTreeController::class, "postDeleteNode"]);
+            \Route::post('delete-key', [RedisTreeController::class, "postDeleteKey"]);
+            \Route::post('write-key', [RedisTreeController::class, "postWriteKey"]);
+            \Route::post('options', [RedisTreeController::class, "postOptions"]);
+            \Route::post('set-option', [RedisTreeController::class, "postOptionSet"])->name('mmeyer2k.redistree.option');
         });
     }
 
-    public static function array2table($data)
+    public static function array2table(array $data): string
     {
         $out = '<table class="table table-hover">';
+
         foreach ($data as $name => $value) {
             $out .= '<tr>';
             $out .= "<th>$name</th>";
@@ -36,10 +37,11 @@ class RedisTreeModel
         return $out . '</table>';
     }
 
-    public static function digestKeyspace($keys, $path)
+    public static function digestKeyspace($keys, string $path)
     {
         $seps = RedisTreeModel::option('separators');
         $out = [];
+
         foreach ($keys as $key) {
             $key = substr($key, strlen($path));
             if (!\Str::contains($key, $seps)) {
@@ -69,18 +71,20 @@ class RedisTreeModel
         return array_unique($out);
     }
 
-    public static function option($opt)
+    public static function option(string $opt)
     {
-        if (\Session::has('options')) {
-            $opts = \Session::get('options');
+        $ses = RedisTreeController::session;
+
+        if (session()->has($ses)) {
+            $opts = session()->get($ses);
 
             return $opts[$opt];
         }
 
-        return \config("redistree.$opt");
+        return config("$ses.$opt");
     }
 
-    public static function redisEscape($str)
+    public static function redisEscape(string $str): string
     {
         foreach (['*', '\\'] as $char) {
             $str = str_replace($char, "\\{$char}", $str);
@@ -89,9 +93,9 @@ class RedisTreeModel
         return $str;
     }
 
-    public static function segments($path)
+    public static function segments(string $path): array
     {
-        $separators = \config('redistree.separators');
+        $separators = config('redistree.separators');
         $segs = [];
 
         $seg = '';

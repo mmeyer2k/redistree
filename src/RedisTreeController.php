@@ -2,10 +2,14 @@
 
 namespace Mmeyer2k\RedisTree;
 
+use App\Http\Controllers\Controller;
 use Mmeyer2k\RedisTree\RedisTreeModel;
+use Predis\Collection\Iterator\Keyspace;
 
-class RedisTreeController extends \App\Http\Controllers\Controller
+class RedisTreeController extends Controller
 {
+
+    const session = 'redistree';
 
     public function getAbout()
     {
@@ -15,18 +19,14 @@ class RedisTreeController extends \App\Http\Controllers\Controller
     public function getIndex()
     {
         // Find filter path and decode it
-        $path = \Request::input('node');
-        
-        if ($path) {
-            $path = hex2bin($path);
-        }
+        $path = urldecode(request('node') ?? '');
 
         // Create escaped redis search string
         $escaped = RedisTreeModel::redisEscape($path);
 
         // Pull keys from redis matching search
         $c = \Redis::connection()->client();
-        $k = new \Predis\Collection\Iterator\Keyspace($c, "$escaped*");
+        $k = new Keyspace($c, "$escaped*");
         $keys = [];
         foreach ($k as $key) {
             $keys[] = $key;
@@ -48,6 +48,10 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function getOptions()
     {
+        if (request()->method() === 'POST') {
+
+        }
+
         return \view('redistree::options');
     }
 
@@ -68,9 +72,11 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postDeleteNode()
     {
-        $node = \Request::input('node');
+        $node = request('node');
+
         $c = \Redis::connection()->client();
-        $keys = new \Predis\Collection\Iterator\Keyspace($c, "*");
+        $keys = new Keyspace($c, "*");
+
         foreach ($keys as $key) {
             if (starts_with($key, $node)) {
                 \Redis::del($key);
@@ -80,32 +86,39 @@ class RedisTreeController extends \App\Http\Controllers\Controller
 
     public function postOptions()
     {
-        $opts = \Request::input('opts');
+        $opts = request('opts');
 
         if (!isset($opts['separators'])) {
             $opts['separators'] = [];
         }
 
-        \Session::put('options', $opts);
-        \Session::put('optionsSaved', true);
+        session()->put(self::session, $opts);
+        session()->put('optionsSaved', true);
+
+        return $this->getOptions();
     }
 
     public function postOptionSet()
     {
-        $opt = \Request::input('opt');
-        $val = \Request::input('val');
-        $ext = \Session::get('options');
+        $opt = request('opt');
+        $val = request('val');
+
+        $ext = session()->get(self::session);
+
+        // If the user has not changed any options yet, load the defaults from config
         if (!is_array($ext)) {
-            $ext = \config('redistree');
+            $ext = config('redistree');
         }
+
         $ext[$opt] = $val;
-        \Session::put('options', $ext);
+
+        session()->put(self::session, $ext);
     }
 
     public function postWriteKey()
     {
-        $key = \Request::input('key');
-        $val = \Request::input('val');
+        $key = request('key');
+        $val = request('val');
 
         \Redis::set($key, $val);
     }

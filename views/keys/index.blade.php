@@ -18,7 +18,7 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
             @foreach ($data as $node)
                 @if(ends_with($node, $dirs))
                     <?php
-                    $nodeLink = '?node=' . bin2hex($path . $node);
+                    $nodeLink = '?node=' . urlencode($path . $node);
                     ?>
                     <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -200,7 +200,7 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 
         function ajaxOptionSet(opt, val) {
             var data = 'opt=' + encodeURIComponent(opt) + '&val=' + encodeURIComponent(val);
-            sendAjax('{!! \action("$controller@postOptionSet") !!}', data);
+            sendAjax('{!! route('mmeyer2k.redistree.option') !!}', data);
         }
 
         $(document).ready(function () {

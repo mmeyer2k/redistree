@@ -13,16 +13,15 @@ namespace Mmeyer2k\RedisTree;
     </a>
     &nbsp;
     @if ($path)
-    @foreach($segs as $i => $seg)
-    <?php
-    $root = '';
-    for ($x = 0; $x < $i; $x++) {
-        $root .= $segs[$x];
-    }
-    ?>
-    <a href="?node={{ bin2hex($root . $seg) }}"
-       class="btn btn-default btn-sm monospace" >{{ $seg }}</a>
-    @endforeach
+        @foreach($segs as $i => $seg)
+            <?php
+            $root = '';
+            for ($x = 0; $x < $i; $x++) {
+                $root .= $segs[$x];
+            }
+            ?>
+            <a href="?node={!! urlencode($root . $seg) !!}" class="btn btn-default btn-sm monospace">{{ $seg }}</a>
+        @endforeach
     @endif
 
     <div style="float: right;">

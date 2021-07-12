@@ -17,4 +17,8 @@ return [
      * Show tooltips over interface items.
      */
     'tooltips' => true,
+    /*
+     * Readonly mode which prevents state changes to database
+     */
+    'readonly' => false,
 ];
