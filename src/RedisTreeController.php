@@ -23,25 +23,40 @@ class RedisTreeController extends Controller
         // Create escaped redis search string
         $escaped = RedisTreeModel::redisEscape($path);
 
+        // Get pagination params
+        $page = request('page') ?? 0;
+
         // Create the keyspace iterator object
         $c = \Redis::connection()->client();
         $k = new Keyspace($c, "$escaped*");
 
         $keys = [];
+        $size = -1;
+        $take = 250;
 
         foreach ($k as $key) {
+            $size++;
+
+            if ($size < $page * $take) {
+                continue;
+            }
+
+            if ($size > $page * $take + $take - 1) {
+                continue;
+            }
+
             $keys[] = $key;
         }
 
-        // Sort the keys
-        sort($keys);
-
-        $data = RedisTreeModel::digestKeyspace($keys, $path);
+        view()->share([
+            'size' => $size,
+            'take' => $take,
+        ]);
 
         return view('redistree::keys.index', [
+            'page' => $page,
             'keys' => $keys,
             'path' => $path,
-            'data' => $data,
             'dirs' => RedisTreeModel::option('separators'),
             'segs' => RedisTreeModel::segments($path),
         ]);
@@ -67,18 +82,6 @@ class RedisTreeController extends Controller
         \Redis::del($key);
     }
 
-    public function postDeleteNode()
-    {
-        $node = RedisTreeModel::redisEscape(request('node'));
-
-        $c = \Redis::connection()->client();
-        $keys = new Keyspace($c, "$node*");
-
-        foreach ($keys as $key) {
-            \Redis::del($key);
-        }
-    }
-
     public function postOptions(): View
     {
         $opts = request('opts');
@@ -92,7 +95,7 @@ class RedisTreeController extends Controller
         return $this->getOptions();
     }
 
-    public function postOptionSet()
+    public function postOptionSet(): void
     {
         $opt = request('opt');
         $val = request('val');
@@ -109,7 +112,7 @@ class RedisTreeController extends Controller
         session()->put(self::session, $ext);
     }
 
-    public function postWriteKey()
+    public function postWriteKey(): void
     {
         $key = request('key');
         $val = request('val');

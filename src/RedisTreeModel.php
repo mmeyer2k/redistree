@@ -11,12 +11,38 @@ class RedisTreeModel
             \Route::get('about', [RedisTreeController::class, "getAbout"])->name('mmeyer2k.redistree.about');
             \Route::get('stats', [RedisTreeController::class, "getStatistics"])->name('mmeyer2k.redistree.stats');
             \Route::get('options', [RedisTreeController::class, "getOptions"])->name('mmeyer2k.redistree.options');
-            \Route::post('delete-node', [RedisTreeController::class, "postDeleteNode"]);
             \Route::post('delete-key', [RedisTreeController::class, "postDeleteKey"]);
             \Route::post('write-key', [RedisTreeController::class, "postWriteKey"]);
             \Route::post('options', [RedisTreeController::class, "postOptions"]);
             \Route::post('set-option', [RedisTreeController::class, "postOptionSet"])->name('mmeyer2k.redistree.option');
         });
+    }
+
+    public static function keyNodeLinks(string $key): string
+    {
+        $out = '';
+
+        $split = str_split($key);
+
+        $found = false;
+
+        while($split) {
+            $chr = array_shift($split);
+
+            $out .= $chr;
+
+            if (!$found && in_array($chr, self::option('separators'))) {
+                $ent = htmlentities($out);
+
+                $enc = urlencode(request('node') . $out);
+
+                $out = "<a href=\"?node=$enc\">$ent</a>";
+
+                $found = true;
+            }
+        }
+
+        return $out;
     }
 
     public static function array2table(array $data): string
@@ -35,41 +61,6 @@ class RedisTreeModel
         }
 
         return $out . '</table>';
-    }
-
-
-    public static function digestKeyspace(array $keys, string $path): array
-    {
-        $seps = RedisTreeModel::option('separators');
-        $out = [];
-
-        foreach ($keys as $key) {
-            $key = substr($key, strlen($path));
-            if (!\Str::contains($key, $seps)) {
-                $out[] = $key;
-                continue;
-            }
-            foreach ($seps as $separator) {
-                $nodes = explode($separator, $key);
-
-                if (!$nodes) {
-                    continue;
-                }
-
-                // To make sure this isnt a sub-key with a differnt kind
-                // of separator, we will test if the resulting relKey
-                // has a separator value still, if so skip
-                if (\Str::contains($nodes[0], $seps)) {
-                    continue;
-                }
-
-                $out[] = $nodes[0] . $separator;
-            }
-        }
-
-        sort($out);
-
-        return array_unique($out);
     }
 
     public static function option(string $opt)

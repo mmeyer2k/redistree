@@ -2,6 +2,20 @@
 
 @section('title') RedisTree - About @endsection
 
+@section('head')
+    <style>
+        .jumbotron {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 992px) {
+            div.row > div {
+                text-align: center !important;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="jumbotron">
         <div class="row">
@@ -13,25 +27,14 @@
                 <p>
                     The naturally beautiful Redis web client.
                 </p>
-                <a
-                        class="btn btn-primary btn-lg icon-github"
-                        target="_blank"
-                        href="https://github.com/mmeyer2k/redistree"
-                        role="button">
+                <a class="btn btn-primary btn-lg icon-github"
+                   target="_blank"
+                   href="https://github.com/mmeyer2k/redistree"
+                   role="button">
                     <i class="fa fa-github"></i>
                     View RedisTree on GitHub
                 </a>
             </div>
         </div>
     </div>
-@endsection
-
-@section('head')
-    <style>
-        @media (max-width: 992px) {
-            div.row > div {
-                text-align: center !important;
-            }
-        }
-    </style>
 @endsection

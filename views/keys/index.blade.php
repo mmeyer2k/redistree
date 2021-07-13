@@ -10,97 +10,47 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 
 @section('content')
     <div class="panel panel-default">
-        <?php
-        echo \view('redistree::keys.header', ['segs' => $segs, 'path' => $path]);
-        ?>
+        {!! view('redistree::keys.header', ['segs' => $segs, 'path' => $path]) !!}
         <div id="divRowData" class="panel-body">
-            {{-- List folders at this node --}}
-            @foreach ($data as $node)
-                @if(ends_with($node, $dirs))
-                    <?php
-                    $nodeLink = '?node=' . urlencode($path . $node);
-                    ?>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                            <a href="{!! $nodeLink !!}" class="btn btn-default monospace">
-                                <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
-                                {{ $node }}
-                            </a>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            @if (!RedisTreeModel::option('view_keys_only'))
-                                <textarea
-                                        placeholder="Node value"
-                                        style="resize: vertical; height: 53px;"
-                                        class="form-control monospace">{{ \Redis::get($path . $node) }}</textarea>
-                            @endif
-                        </div>
-                        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
-                            @if (!RedisTreeModel::option('view_keys_only'))
-                                <button
-                                        onclick="ajaxUpdate($(this).attr('data-node'), $(this).parent().parent().find('textarea').val())"
-                                        data-node="{{ $path . $node }}"
-                                        class="btn btn-default">
-                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-                                </button>
-                            @endif
-                            <button
-                                    onclick="ajaxDeleteNode($(this).attr('data-node'))"
-                                    data-node="{{ $path . $node }}"
-                                    class="btn btn-danger">
-                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                            </button>
-                        </div>
+            @foreach ($keys as $key)
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 monospace divKeyNameCell">
+                        {!! RedisTreeModel::keyNodeLinks(substr($key, strlen($path))) !!}
                     </div>
-                @endif
-            @endforeach
-            <?php
-
-            foreach ($data as $key) {
-            if (ends_with($key, $dirs)) {
-                continue;
-            }
-            ?>
-            <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 monospace divKeyNameCell">
-                    {{ $key }}
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    @if (!RedisTreeModel::option('view_keys_only'))
-                        <?php
-                        $type = (string)\Redis::type($path . $key);
-                        ?>
-                        @if ($type === 'string')
-                            <textarea
-                                    placeholder="Key value"
-                                    style="resize: vertical; height: 53px;"
-                                    class="form-control monospace">{{ \Redis::get($path . $key) }}</textarea>
-                        @else
-                            Non-string type ({!! $type !!}) not supported, yet.
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        @if (!RedisTreeModel::option('view_keys_only'))
+                            <?php
+                            $type = (string)\Redis::type($path . $key);
+                            ?>
+                            @if ($type === 'string')
+                                <textarea
+                                        placeholder="Key value"
+                                        style="resize: vertical; height: 53px;"
+                                        class="form-control monospace">{{ \Redis::get($path . $key) }}</textarea>
+                            @else
+                                Non-string type ({!! $type !!}) not supported, yet.
+                            @endif
                         @endif
-                    @endif
-                </div>
-                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
-                    @if (!RedisTreeModel::option('view_keys_only'))
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
+                        @if (!RedisTreeModel::option('view_keys_only'))
+                            <button
+                                    onclick="ajaxUpdate($(this).attr('data-key'), $(this).parent().parent().find('textarea').val())"
+                                    class="btn btn-default rowBtnSave"
+                                    data-key="{{ $path . $key }}">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            </button>
+                        @endif
                         <button
-                                onclick="ajaxUpdate($(this).attr('data-key'), $(this).parent().parent().find('textarea').val())"
-                                class="btn btn-default rowBtnSave"
+                                onclick="ajaxDeleteKey($(this).attr('data-key'))"
+                                class="btn btn-danger"
                                 data-key="{{ $path . $key }}">
-                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                         </button>
-                    @endif
-                    <button
-                            onclick="ajaxDeleteKey($(this).attr('data-key'))"
-                            class="btn btn-danger"
-                            data-key="{{ $path . $key }}">
-                        <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                    </button>
+                    </div>
                 </div>
-            </div>
-            <?php
-            }
-            ?>
-            @if (count($data) === 0)
+            @endforeach
+            @if (count($keys) === 0)
                 <h3>
                     <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
                     This keyspace is empty!
@@ -167,16 +117,6 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
     <script>
 
         var dangerPrompt = <?php echo (int)RedisTreeModel::option('danger_prompt') ?>;
-
-        function ajaxDeleteNode(node) {
-            if (dangerPrompt === 1) {
-                if (!confirm('Are you sure you want to delete this node?\n\n' + node)) {
-                    return false;
-                }
-            }
-            var data = 'node=' + encodeURIComponent(node);
-            sendAjax('{!! \action("$controller@postDeleteNode") !!}', data);
-        }
 
         function ajaxDeleteKey(key) {
             if (dangerPrompt === 1) {

@@ -40,7 +40,7 @@ $links = [
                     @endphp
                     <li class="{{ $active ? 'active' : '' }}">
                         <a href="{!! $link[0] !!}">
-                            {!! $link[1] or '' !!}
+                            {!! $link[1] ?? '' !!}
                             {{ $name }}
                         </a>
                     </li>
