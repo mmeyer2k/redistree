@@ -2,9 +2,10 @@
 
 namespace Mmeyer2k\RedisTree;
 
-class RedisTreeServiceProvider extends \Illuminate\Support\ServiceProvider
-{
+use Illuminate\Support\ServiceProvider;
 
+class RedisTreeServiceProvider extends ServiceProvider
+{
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/../views', 'redistree');
@@ -17,8 +18,7 @@ class RedisTreeServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-                __DIR__ . '/../config.php', 'redistree'
+            __DIR__ . '/../config.php', 'redistree'
         );
     }
-
 }

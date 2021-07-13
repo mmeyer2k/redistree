@@ -2,112 +2,121 @@
 
 namespace Mmeyer2k\RedisTree;
 
-use Mmeyer2k\RedisTree\RedisTreeModel;
+use App\Http\Controllers\Controller;
+use Illuminate\View\View;
+use Predis\Collection\Iterator\Keyspace;
 
-class RedisTreeController extends \App\Http\Controllers\Controller
+class RedisTreeController extends Controller
 {
+    const session = 'redistree';
 
-    public function getAbout()
+    public function getAbout(): View
     {
-        return \view('redistree::about');
+        return view('redistree::about');
     }
 
-    public function getIndex()
+    public function getIndex(): View
     {
         // Find filter path and decode it
-        $path = \Request::input('node');
-        
-        if ($path) {
-            $path = hex2bin($path);
-        }
+        $path = urldecode(request('node') ?? '');
 
         // Create escaped redis search string
         $escaped = RedisTreeModel::redisEscape($path);
 
-        // Pull keys from redis matching search
+        // Get pagination params
+        $page = request('page') ?? 0;
+
+        // Create the keyspace iterator object
         $c = \Redis::connection()->client();
-        $k = new \Predis\Collection\Iterator\Keyspace($c, "$escaped*");
+        $k = new Keyspace($c, "$escaped*");
+
         $keys = [];
+        $size = -1;
+        $take = RedisTreeModel::option('pagination');
+
         foreach ($k as $key) {
+            $size++;
+
+            if ($size < $page * $take) {
+                continue;
+            }
+
+            if ($size > $page * $take + $take - 1) {
+                continue;
+            }
+
             $keys[] = $key;
         }
 
-        // Sort the keys
-        sort($keys);
-        
-        $data = RedisTreeModel::digestKeyspace($keys, $path);
+        view()->share([
+            'size' => $size,
+            'take' => $take,
+        ]);
 
-        return \view('redistree::keys.index', [
+        return view('redistree::keys.index', [
+            'page' => $page,
             'keys' => $keys,
             'path' => $path,
-            'data' => $data,
             'dirs' => RedisTreeModel::option('separators'),
             'segs' => RedisTreeModel::segments($path),
         ]);
     }
 
-    public function getOptions()
+    public function getOptions(): View
     {
-        return \view('redistree::options');
+        return view('redistree::options');
     }
 
-    public function getStatistics()
+    public function getStatistics(): View
     {
         $info = \Redis::info();
 
-        return \view('redistree::statistics', [
+        return view('redistree::statistics', [
             'info' => $info,
         ]);
     }
 
-    public function postDeleteKey()
+    public function postDeleteKey(): void
     {
-        $key = \Request::input('key');
+        $key = request('key');
         \Redis::del($key);
     }
 
-    public function postDeleteNode()
+    public function postOptions(): View
     {
-        $node = \Request::input('node');
-        $c = \Redis::connection()->client();
-        $keys = new \Predis\Collection\Iterator\Keyspace($c, "*");
-        foreach ($keys as $key) {
-            if (starts_with($key, $node)) {
-                \Redis::del($key);
-            }
-        }
-    }
-
-    public function postOptions()
-    {
-        $opts = \Request::input('opts');
+        $opts = request('opts');
 
         if (!isset($opts['separators'])) {
             $opts['separators'] = [];
         }
 
-        \Session::put('options', $opts);
-        \Session::put('optionsSaved', true);
+        session()->put(self::session, $opts);
+
+        return $this->getOptions();
     }
 
-    public function postOptionSet()
+    public function postOptionSet(): void
     {
-        $opt = \Request::input('opt');
-        $val = \Request::input('val');
-        $ext = \Session::get('options');
+        $opt = request('opt');
+        $val = request('val');
+
+        $ext = session()->get(self::session);
+
+        // If the user has not changed any options yet, load the defaults from config
         if (!is_array($ext)) {
-            $ext = \config('redistree');
+            $ext = config('redistree');
         }
+
         $ext[$opt] = $val;
-        \Session::put('options', $ext);
+
+        session()->put(self::session, $ext);
     }
 
-    public function postWriteKey()
+    public function postWriteKey(): void
     {
-        $key = \Request::input('key');
-        $val = \Request::input('val');
+        $key = request('key');
+        $val = request('val');
 
         \Redis::set($key, $val);
     }
-
 }

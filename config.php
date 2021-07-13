@@ -17,4 +17,12 @@ return [
      * Show tooltips over interface items.
      */
     'tooltips' => true,
+    /*
+     * Readonly mode which prevents state changes to database
+     */
+    'readonly' => false,
+    /*
+     * Number of keys per page (valid integers: 25, 50, 100, 250, 500, 1000)
+     */
+    'pagination' => 250,
 ];

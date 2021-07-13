@@ -22,7 +22,10 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 padding: 0px 0px 0px 0px;
                 box-shadow: 0px 0px 15px #222222;
             }
-            .navbar, .panel, .jumbotron {
+            a:hover {
+                text-decoration: none;
+            }
+            .navbar {
                 margin-bottom: 0;
             }
             .monospace {
