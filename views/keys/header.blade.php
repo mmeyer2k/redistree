@@ -127,8 +127,19 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
            class="btn btn-default btn-sm">
             <span id="btnRefreshIcon" class="glyphicon glyphicon-fast-forward"></span>
         </a>
+        <select class="input-sm" style="width: 120px; float: right;" id="takechange">
+            @foreach([25, 50, 100, 250, 500, 1000] as $i)
+                <option value="{!! $i !!}" {!! $take == $i ? 'selected="selected"' : '' !!}>
+                    {!! $i !!} per page
+                </option>
+            @endforeach
+        </select>
     </div>
     <script>
+        $("#takechange").change(function () {
+            ajaxOptionSet('pagination', $(this).val());
+            location.reload(true);
+        });
         $("#pagechange").change(function () {
             window.location.href='?node={!! request('node') !!}&page=' + $(this).val();
         });

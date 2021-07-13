@@ -32,7 +32,7 @@ class RedisTreeController extends Controller
 
         $keys = [];
         $size = -1;
-        $take = 250;
+        $take = RedisTreeModel::option('pagination');
 
         foreach ($k as $key) {
             $size++;
