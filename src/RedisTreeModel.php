@@ -8,8 +8,8 @@ class RedisTreeModel
     {
         \Route::group(['prefix' => $prefix], function () {
             \Route::get('/', [RedisTreeController::class, "getIndex"])->name('mmeyer2k.redistree.index');
-            \Route::get('about', [RedisTreeController::class, "getAbout"]);
-            \Route::get('stats', [RedisTreeController::class, "getStatistics"]);
+            \Route::get('about', [RedisTreeController::class, "getAbout"])->name('mmeyer2k.redistree.about');
+            \Route::get('stats', [RedisTreeController::class, "getStatistics"])->name('mmeyer2k.redistree.stats');
             \Route::get('options', [RedisTreeController::class, "getOptions"])->name('mmeyer2k.redistree.options');
             \Route::post('delete-node', [RedisTreeController::class, "postDeleteNode"]);
             \Route::post('delete-key', [RedisTreeController::class, "postDeleteKey"]);
@@ -37,7 +37,8 @@ class RedisTreeModel
         return $out . '</table>';
     }
 
-    public static function digestKeyspace($keys, string $path)
+
+    public static function digestKeyspace(array $keys, string $path): array
     {
         $seps = RedisTreeModel::option('separators');
         $out = [];

@@ -1,16 +1,15 @@
 <?php
-$controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 $links = [
     'Statistics' => [
-        \action("$controller@getStatistics"),
+        route('mmeyer2k.redistree.stats'),
         '<i class="fa fa-line-chart"></i>',
     ],
     'Options' => [
-        \action("$controller@getOptions"),
+        route('mmeyer2k.redistree.options'),
         '<i class="fa fa-cogs"></i>',
     ],
     'About RedisTree' => [
-        \action("$controller@getAbout"),
+        route('mmeyer2k.redistree.about'),
         '<i class="fa fa-info-circle"></i>',
     ],
 ];

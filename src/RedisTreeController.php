@@ -3,20 +3,19 @@
 namespace Mmeyer2k\RedisTree;
 
 use App\Http\Controllers\Controller;
-use Mmeyer2k\RedisTree\RedisTreeModel;
+use Illuminate\View\View;
 use Predis\Collection\Iterator\Keyspace;
 
 class RedisTreeController extends Controller
 {
-
     const session = 'redistree';
 
-    public function getAbout()
+    public function getAbout(): View
     {
-        return \view('redistree::about');
+        return view('redistree::about');
     }
 
-    public function getIndex()
+    public function getIndex(): View
     {
         // Find filter path and decode it
         $path = urldecode(request('node') ?? '');
@@ -24,20 +23,22 @@ class RedisTreeController extends Controller
         // Create escaped redis search string
         $escaped = RedisTreeModel::redisEscape($path);
 
-        // Pull keys from redis matching search
+        // Create the keyspace iterator object
         $c = \Redis::connection()->client();
         $k = new Keyspace($c, "$escaped*");
+
         $keys = [];
+
         foreach ($k as $key) {
             $keys[] = $key;
         }
 
         // Sort the keys
         sort($keys);
-        
+
         $data = RedisTreeModel::digestKeyspace($keys, $path);
 
-        return \view('redistree::keys.index', [
+        return view('redistree::keys.index', [
             'keys' => $keys,
             'path' => $path,
             'data' => $data,
@@ -46,45 +47,39 @@ class RedisTreeController extends Controller
         ]);
     }
 
-    public function getOptions()
+    public function getOptions(): View
     {
-        if (request()->method() === 'POST') {
-
-        }
-
-        return \view('redistree::options');
+        return view('redistree::options');
     }
 
-    public function getStatistics()
+    public function getStatistics(): View
     {
         $info = \Redis::info();
 
-        return \view('redistree::statistics', [
+        return view('redistree::statistics', [
             'info' => $info,
         ]);
     }
 
-    public function postDeleteKey()
+    public function postDeleteKey(): void
     {
-        $key = \Request::input('key');
+        $key = request('key');
         \Redis::del($key);
     }
 
     public function postDeleteNode()
     {
-        $node = request('node');
+        $node = RedisTreeModel::redisEscape(request('node'));
 
         $c = \Redis::connection()->client();
-        $keys = new Keyspace($c, "*");
+        $keys = new Keyspace($c, "$node*");
 
         foreach ($keys as $key) {
-            if (starts_with($key, $node)) {
-                \Redis::del($key);
-            }
+            \Redis::del($key);
         }
     }
 
-    public function postOptions()
+    public function postOptions(): View
     {
         $opts = request('opts');
 
@@ -93,7 +88,6 @@ class RedisTreeController extends Controller
         }
 
         session()->put(self::session, $opts);
-        session()->put('optionsSaved', true);
 
         return $this->getOptions();
     }
@@ -122,5 +116,4 @@ class RedisTreeController extends Controller
 
         \Redis::set($key, $val);
     }
-
 }
