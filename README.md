@@ -1,6 +1,6 @@
-# :deciduous_tree:RedisTree
+# RedisTree
 RedisTree is a Laravel package that provides an elegant web interface for Redis.
-It assists you in monitoring your server statistics and exploring your Redis key hierarchically.
+It assists you in monitoring your server statistics and exploring your Redis key hierarchy.
 
 <a href="SCREENSHOTS.md">Screenshots</a>
 
@@ -9,7 +9,7 @@ It assists you in monitoring your server statistics and exploring your Redis key
 ## Install
 ### Add to Composer
 ```
-composer require "mmeyer2k/redistree:dev-master"
+composer require "mmeyer2k/redistree:^1.0"
 ```
 ### Add Service Provider
 Add the following line into the 'providers' array in `config/app.php`
