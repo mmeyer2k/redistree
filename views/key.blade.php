@@ -49,19 +49,21 @@
                     {!! $ttl === -1 ? 'forever' : now()->addSeconds($ttl)->diffForHumans() !!}
                 </td>
             </tr>
-            <tr>
-                <th>Content</th>
-                <td>
-                    <textarea
+            @if ($type === 'string')
+                <tr>
+                    <th>Content</th>
+                    <td>
+                        <textarea
                             id="txt-value"
                             style="overflow: scroll; white-space: nowrap; width: 100%; height: 200px; resize: vertical;"
                             name="value"
                             class="monospace">{{ $data }}</textarea>
-                    <button class="btn btn-primary" id="btn-save">
-                        Save
-                    </button>
-                </td>
-            </tr>
+                        <button class="btn btn-primary" id="btn-save">
+                            Save
+                        </button>
+                    </td>
+                </tr>
+            @endif
         </table>
     </div>
 @endsection
