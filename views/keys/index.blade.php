@@ -14,37 +14,16 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
         <div id="divRowData" class="panel-body">
             @foreach ($keys as $key)
                 <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 monospace divKeyNameCell">
+                    <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 monospace divKeyNameCell">
                         {!! RedisTreeModel::keyNodeLinks(substr($key, strlen($path))) !!}
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        @if (!RedisTreeModel::option('view_keys_only'))
-                            <?php
-                            $type = (string)\Redis::type($path . $key);
-                            ?>
-                            @if ($type === 'string')
-                                <textarea
-                                        placeholder="Key value"
-                                        style="resize: vertical; height: 53px;"
-                                        class="form-control monospace">{{ \Redis::get($path . $key) }}</textarea>
-                            @else
-                                Non-string type ({!! $type !!}) not supported, yet.
-                            @endif
-                        @endif
-                    </div>
                     <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
-                        @if (!RedisTreeModel::option('view_keys_only'))
-                            <button
-                                    onclick="ajaxUpdate($(this).attr('data-key'), $(this).parent().parent().find('textarea').val())"
-                                    class="btn btn-default rowBtnSave"
-                                    data-key="{{ $path . $key }}">
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-                            </button>
-                        @endif
-                        <button
-                                onclick="ajaxDeleteKey($(this).attr('data-key'))"
-                                class="btn btn-danger"
-                                data-key="{{ $path . $key }}">
+                        <a href="{!! route('mmeyer2k.redistree.key', [urlencode($key)]) !!}" class="btn btn-default">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </a>
+                        <button class="btn btn-danger"
+                                data-key="{{ $key }}"
+                                data-cmd="{{ route('mmeyer2k.redistree.key.del', urlencode($key)) }}">
                             <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -63,16 +42,15 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
         <div class="panel-footer">
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                    <input
-                            class="form-control input-lg monospace"
-                            placeholder="Key (required)"
-                            type="text">
+                    <input class="form-control input-lg monospace"
+                           placeholder="Key (required)"
+                           type="text">
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <textarea
-                        class="form-control monospace"
-                        style="resize: vertical; white-space: nowrap; height: 53px;"
-                        placeholder="Value"></textarea>
+                    <textarea
+                            class="form-control monospace"
+                            style="resize: vertical; white-space: nowrap; height: 53px;"
+                            placeholder="Value"></textarea>
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
                     <button class="btn btn-defaul btn-primary btn-lg" disabled>
@@ -116,38 +94,27 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 @section('tail')
     <script>
 
-        var dangerPrompt = <?php echo (int)RedisTreeModel::option('danger_prompt') ?>;
-
-        function ajaxDeleteKey(key) {
-            if (dangerPrompt === 1) {
-                if (!confirm('Are you sure you want to delete this key?\n\n' + key)) {
-                    return false;
-                }
-            }
-            var data = 'key=' + encodeURIComponent(key);
-            sendAjax('{!! \action("$controller@postDeleteKey") !!}', data);
-        }
-
-        function ajaxUpdate(key, val) {
-            if (dangerPrompt === 1) {
-                if (!confirm('Are you sure you want to add/update this key?\n\n' + key)) {
-                    return false;
-                }
-            }
-            var data = 'key=' + encodeURIComponent(key) + '&val=' + encodeURIComponent(val);
-            sendAjax('{!! \action("$controller@postWriteKey") !!}', data);
-        }
-
         function ajaxOptionSet(opt, val) {
             var data = 'opt=' + encodeURIComponent(opt) + '&val=' + encodeURIComponent(val);
             sendAjax('{!! route('mmeyer2k.redistree.option') !!}', data);
         }
 
         $(document).ready(function () {
+            $('.btn-danger').click(function () {
+                if (dangerPrompt === 1) {
+                    let key = $(this).attr('data-key');
+                    if (!confirm('Are you sure you want to delete this key?\n\n' + key)) {
+                        return false;
+                    }
+                }
+                sendAjax($(this).attr('data-cmd'));
+            });
+
             $('.panel-footer button').click(function () {
                 var base = '{{ addslashes($path) }}';
                 ajaxUpdate(base + $('.panel-footer input').val(), $('.panel-footer textarea').val());
             });
+
             $('.panel-footer input').on('keyup change blur', function () {
                 var disabled = $(this).val().length === 0;
                 $('.panel-footer button').prop('disabled', disabled);

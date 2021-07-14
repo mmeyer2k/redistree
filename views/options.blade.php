@@ -32,20 +32,6 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 <br>
                 <div class="row">
                     <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                        <input type="hidden" name="opts[view_keys_only]" value="0">
-                        <input name="opts[view_keys_only]"
-                               value="1"
-                               type="checkbox"
-                               {{ RedisTreeModel::option('view_keys_only') ? 'CHECKED' : '' }}
-                               data-reverse>
-                    </div>
-                    <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
-                        Speed up navigating through the key structure by not loading each key's data.
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
                         <input type="hidden" name="opts[tooltips]" value="0">
                         <input name="opts[tooltips]"
                                value="1"

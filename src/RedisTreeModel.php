@@ -11,10 +11,11 @@ class RedisTreeModel
             \Route::get('about', [RedisTreeController::class, "getAbout"])->name('mmeyer2k.redistree.about');
             \Route::get('stats', [RedisTreeController::class, "getStatistics"])->name('mmeyer2k.redistree.stats');
             \Route::get('options', [RedisTreeController::class, "getOptions"])->name('mmeyer2k.redistree.options');
-            \Route::post('delete-key', [RedisTreeController::class, "postDeleteKey"]);
-            \Route::post('write-key', [RedisTreeController::class, "postWriteKey"]);
+            \Route::get('key/{key}', [RedisTreeController::class, "getKey"])->name('mmeyer2k.redistree.key');
             \Route::post('options', [RedisTreeController::class, "postOptions"]);
             \Route::post('set-option', [RedisTreeController::class, "postOptionSet"])->name('mmeyer2k.redistree.option');
+            \Route::post('key/{key}/set', [RedisTreeController::class, "postWriteKey"])->name('mmeyer2k.redistree.key.set');;
+            \Route::post('key/{key}/del', [RedisTreeController::class, "postDeleteKey"])->name('mmeyer2k.redistree.key.del');
         });
     }
 

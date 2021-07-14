@@ -34,8 +34,8 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                     data-placement="bottom"
                     onclick="ajaxOptionSet('danger_prompt', 1)"
                     title="Prompt before performing dangrous actions"
-                    class="btn btn-warning btn-sm">
-                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+                    class="btn btn-sm">
+                <span class="glyphicon glyphicon-alert text-danger" aria-hidden="true"></span>
             </button>
         @else
             <button
@@ -48,28 +48,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             </button>
         @endif
 
-        @if (!RedisTreeModel::option('view_keys_only'))
-            <button
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    onclick="ajaxOptionSet('view_keys_only', 1)"
-                    title="View keys only"
-                    class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-            </button>
-        @else
-            <button
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="View keys and data"
-                    onclick="ajaxOptionSet('view_keys_only', 0)"
-                    class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-            </button>
-        @endif
-
-        <button
-                id="btnRefresh"
+        <button id="btnRefresh"
                 data-toggle="tooltip"
                 data-placement="bottom"
                 title="Refresh current view"

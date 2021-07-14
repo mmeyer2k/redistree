@@ -62,6 +62,32 @@ class RedisTreeController extends Controller
         ]);
     }
 
+    public function getKey(string $key): View
+    {
+        $type = (string)\Redis::type($key);
+
+        $len = [
+            'string' => 'strlen',
+            'list' => 'llen',
+            'zset' => 'zcard',
+            'set' => 'smembers',
+        ][$type];
+
+        if ($type === 'string') {
+            $data = \Redis::get($key);
+        } else {
+            $data = '';
+        }
+
+        return view('redistree::key', [
+            'key' => $key,
+            'len' => $len,
+            'ttl' => (int)\Redis::ttl($key),
+            'type' => $type,
+            'data' => $data,
+        ]);
+    }
+
     public function getOptions(): View
     {
         return view('redistree::options');
@@ -76,9 +102,8 @@ class RedisTreeController extends Controller
         ]);
     }
 
-    public function postDeleteKey(): void
+    public function postDeleteKey(string $key): void
     {
-        $key = request('key');
         \Redis::del($key);
     }
 
@@ -112,11 +137,12 @@ class RedisTreeController extends Controller
         session()->put(self::session, $ext);
     }
 
-    public function postWriteKey(): void
+    public function postWriteKey(string $key)
     {
-        $key = request('key');
-        $val = request('val');
+        $val = request('value');
 
         \Redis::set($key, $val);
+
+        return redirect()->route('mmeyer2k.redistree.key', urlencode($key));
     }
 }

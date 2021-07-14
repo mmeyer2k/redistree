@@ -4,7 +4,8 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 ?><!doctype html>
 <html>
     <head>
-        <title> @yield('title') </title>
+        <title>@yield('title')</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -12,6 +13,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link rel="icon" type="image/png" href="//cdn.rawgit.com/mmeyer2k/redistree/master/assets/favicon.ico">
         <meta name="google" value="notranslate">
+
         <style>
             * {
                 -webkit-border-radius: 0 !important;
@@ -44,14 +46,27 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 to { transform: scale(1) rotate(360deg);}
             }
         </style>
+
+        <script>
+            var dangerPrompt = @json((int)RedisTreeModel::option('danger_prompt'))
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
+
         @yield('head')
     </head>
     <body>
         <div class="container">
-            {!! \view('redistree::navbar') !!}
+            {!! view('redistree::navbar') !!}
             @yield('content')
         </div>
+
         @yield('tail')
+
         <script>
             function reloadPage() {
                 window.location.href = '{!! $_SERVER["REQUEST_URI"] !!}';
