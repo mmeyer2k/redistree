@@ -25,7 +25,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 box-shadow: 0px 0px 15px #222222;
             }
             a:hover {
-                text-decoration: none;
+                text-decoration: underline;
             }
             .navbar {
                 margin-bottom: 0;
