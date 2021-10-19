@@ -61,7 +61,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
     </head>
     <body>
         <div class="container">
-            {!! view('redistree::navbar') !!}
+            @include('redistree::navbar')
             @yield('content')
         </div>
 
