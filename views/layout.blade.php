@@ -69,7 +69,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 
         <script>
             function reloadPage() {
-                window.location.href = '{!! $_SERVER["REQUEST_URI"] !!}';
+                window.location.href = @json($_SERVER["REQUEST_URI"]);
             }
 
             function sendAjax(url, data) {
