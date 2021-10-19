@@ -23,23 +23,47 @@ class RedisTreeModel
     {
         $out = '';
 
+        $separators = self::option('separators');
+
+        $segments = self::explodeKey($key, $separators);
+
+        $node = '';
+
+        foreach($segments as $key => $segment) {
+            $node .= urlencode($segment);
+
+            if ($key === array_key_last($segments)) {
+                $route = \route('mmeyer2k.redistree.key', [$node]);
+
+                $out .= "<a href=\"$route\">$segment</a>";
+            } else {
+                $out .= "<a href=\"?node=$node\">$segment</a>";
+            }
+        }
+
+        return $out;
+    }
+
+    public static function explodeKey(string $key, array $separators): array
+    {
+        $out = [];
+
+        $seg = '';
+
         $split = str_split($key);
 
-        $found = false;
-
-        while($split) {
+        while ($split) {
             $chr = array_shift($split);
 
-            $out .= $chr;
+            $seg .= $chr;
 
-            if (!$found && in_array($chr, self::option('separators'))) {
-                $ent = htmlentities($out);
+            if (in_array($chr, $separators)) {
+                $out[] = $seg;
+                $seg = '';
+            }
 
-                $enc = urlencode(request('node') . $out);
-
-                $out = "<a href=\"?node=$enc\">$ent</a>";
-
-                $found = true;
+            if (count($split) === 0) {
+                $out[] = $seg;
             }
         }
 
