@@ -9,7 +9,7 @@ It assists you in monitoring your server statistics and exploring your Redis key
 ## Install
 ### Add to Composer
 ```
-composer require "mmeyer2k/redistree:^1.0"
+composer require "mmeyer2k/redistree:dev-master"
 ```
 ### Add Service Provider
 Add the following line into the 'providers' array in `config/app.php`
