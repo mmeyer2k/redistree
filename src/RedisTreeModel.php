@@ -29,15 +29,17 @@ class RedisTreeModel
 
         $node = '';
 
+        $base = urlencode(request('node') ?? '');
+
         foreach($segments as $key => $segment) {
             $node .= urlencode($segment);
 
             if ($key === array_key_last($segments)) {
-                $route = \route('mmeyer2k.redistree.key', [$node]);
+                $route = \route('mmeyer2k.redistree.key', [$base . $node]);
 
                 $out .= "<a href=\"$route\">$segment</a>";
             } else {
-                $out .= "<a href=\"?node=$node\">$segment</a>";
+                $out .= "<a href=\"?node=$base$node\">$segment</a>";
             }
         }
 
