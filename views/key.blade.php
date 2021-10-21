@@ -28,12 +28,20 @@
 
 @section('content')
     <div class="panel panel-default">
-        <h1 class="monospace" style="margin-left: 8px;">{{ $key }}</h1>
+        <h1 class="monospace" style="margin-left: 8px;">
+            {{ $key }}
+            <div style="float: right; padding-right: 10px;">
+                <button class="btn btn-default">Rename</button>
+                <button class="btn btn-danger">Delete</button>
+            </div>
+        </h1>
         <hr>
         <table class="table">
             <tr>
                 <th>Key name</th>
-                <td>{{ $key }}</td>
+                <td>
+                    {{ $key }}
+                </td>
             </tr>
             <tr>
                 <th>Type</th>
@@ -57,6 +65,7 @@
                             id="txt-value"
                             style="overflow: scroll; white-space: nowrap; width: 100%; height: 200px; resize: vertical;"
                             name="value"
+                            style="white-space: {{ optional($options['wordwrap']) ? '' : '' }}"
                             class="monospace">{{ $data }}</textarea>
                         <button class="btn btn-primary" id="btn-save">
                             Save

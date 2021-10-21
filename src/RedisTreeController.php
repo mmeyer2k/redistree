@@ -4,6 +4,7 @@ namespace Mmeyer2k\RedisTree;
 
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
+use Illuminate\Http\Response;
 use Predis\Collection\Iterator\Keyspace;
 
 class RedisTreeController extends Controller
@@ -144,5 +145,14 @@ class RedisTreeController extends Controller
         \Redis::set($key, $val);
 
         return redirect()->route('mmeyer2k.redistree.key', urlencode($key));
+    }
+
+    public function favicon(): Response
+    {
+        $data = file_get_contents(__DIR__ . '/../favicon.ico');
+
+        return response()->make($data, 200, [
+            'Content-Type' => 'image/png',
+        ]);
     }
 }

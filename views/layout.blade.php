@@ -11,7 +11,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <link rel="icon" type="image/png" href="//cdn.rawgit.com/mmeyer2k/redistree/master/assets/favicon.ico">
+        <link rel="icon" type="image/png" href="{{ route('mmeyer2k.redistree.favicon') }}">
         <meta name="google" value="notranslate">
 
         <style>
@@ -48,7 +48,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
         </style>
 
         <script>
-            var dangerPrompt = @json((int)RedisTreeModel::option('danger_prompt'))
+            var dangerPrompt = @json($option('danger_prompt') ?? true);
 
             $.ajaxSetup({
                 headers: {
@@ -92,7 +92,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 $('#btnRefresh').click(function () {
                     dimControls();
                     $('#btnRefreshIcon').addClass('glyphicon-refresh-animate');
-                    window.location.href = '{{ $_SERVER["REQUEST_URI"] }}';
+                    window.location.href = @json(request()->getRequestUri());
                 });
                 if ("{{ (int) RedisTreeModel::option('tooltips') }}" === "1") {
                     $('[data-toggle="tooltip"]').tooltip();

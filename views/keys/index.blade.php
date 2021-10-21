@@ -10,7 +10,7 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 
 @section('content')
     <div class="panel panel-default">
-        {!! view('redistree::keys.header', ['segs' => $segs, 'path' => $path]) !!}
+        @include('redistree::keys.header', ['segs' => $segs, 'path' => $path])
         <div id="divRowData" class="panel-body">
             @foreach ($keys as $key)
                 <div class="row">

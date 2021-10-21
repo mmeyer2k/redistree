@@ -25,4 +25,8 @@ return [
      * Number of keys per page (valid integers: 25, 50, 100, 250, 500, 1000)
      */
     'pagination' => 250,
+    /*
+     * Wrap long lines in text areas
+     */
+    'wordwrap' => true,
 ];

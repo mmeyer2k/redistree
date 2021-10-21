@@ -8,10 +8,16 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 
 @section('content')
     <form id="formOptions" action="{{ route('mmeyer2k.redistree.options') }}" method="POST">
+        @csrf
         <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 6px;">
+                <i class="fa fa-bell" aria-hidden="true"></i>
+                Changes on this page will only affect your current session.
+                <a href="#">OK</a>
+            </div>
             <div class="panel-heading">
                 <h3>
-                    <i class="fa fa-cogs"></i>
+                    <i class="fa fa-cogs" aria-hidden="true"></i>
                     Options
                 </h3>
             </div>
@@ -22,7 +28,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                         <input name="opts[danger_prompt]"
                                value="1"
                                type="checkbox"
-                               {{ RedisTreeModel::option('danger_prompt') ? 'CHECKED' : '' }}
+                               {{ $option('danger_prompt') ? 'CHECKED' : '' }}
                                data-reverse>
                     </div>
                     <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
@@ -36,11 +42,25 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                         <input name="opts[tooltips]"
                                value="1"
                                type="checkbox"
-                               {{ RedisTreeModel::option('tooltips') ? 'CHECKED' : '' }}
+                               {{ $option('tooltips') ? 'CHECKED' : '' }}
                                data-reverse>
                     </div>
                     <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
-                        Enable interface tool tips.
+                        Enable interface tool tips?
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                        <input type="hidden" name="opts[wordwrap]" value="0">
+                        <input name="opts[wordwrap]"
+                               value="1"
+                               type="checkbox"
+                               {{ $option('wordwrap') ? 'CHECKED' : '' }}
+                               data-reverse>
+                    </div>
+                    <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
+                        Wrap long lines in text areas?
                     </div>
                 </div>
             </div>
