@@ -32,7 +32,12 @@
             {{ $key }}
             <div style="float: right; padding-right: 10px;">
                 <button class="btn btn-default">Rename</button>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger btn-redis"
+                        data-redis-danger="Delete this key: {{ $key }} ?"
+                        data-redis-verb="del"
+                        data-redis-param0="{{ $key }}">
+                    Delete
+                </button>
             </div>
         </h1>
         <hr>
@@ -65,7 +70,7 @@
                             id="txt-value"
                             style="overflow: scroll; white-space: nowrap; width: 100%; height: 200px; resize: vertical;"
                             name="value"
-                            style="white-space: {{ optional($options['wordwrap']) ? '' : '' }}"
+                            style="white-space: {{ $option('wordwrap') ? '' : '' }}"
                             class="monospace">{{ $data }}</textarea>
                         <button class="btn btn-primary" id="btn-save">
                             Save

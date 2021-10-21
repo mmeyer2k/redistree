@@ -3,7 +3,6 @@
 namespace Mmeyer2k\RedisTree;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View;
 
 class RedisTreeServiceProvider extends ServiceProvider
 {
@@ -15,11 +14,7 @@ class RedisTreeServiceProvider extends ServiceProvider
             __DIR__ . '/../config.php' => config_path('redistree.php'),
         ]);
 
-        view()->composer('redistree::*', function (View $view) {
-            view()->share('option', function (string $option) {
-                return RedisTreeModel::option($option);
-            });
-        });
+        view()->composer('redistree::*', RedisTreeViewComposer::class);
     }
 
     public function register()

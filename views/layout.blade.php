@@ -69,7 +69,27 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 
         <script>
             function reloadPage() {
-                window.location.href = @json($_SERVER["REQUEST_URI"]);
+                window.location.href = @json(request()->getRequestUri());
+            }
+
+            function dimControls() {
+                $('.btn, input, select, textarea').prop('disabled', true);
+            }
+
+            function redis(verb, param0) {
+                dimControls();
+
+                $.ajax({
+                    url: @json(route('mmeyer2k.redistree.redis')),
+                    data: {
+                        verb: verb,
+                        param0: param0,
+                    },
+                    method: 'POST',
+                    success: function () {
+                        reloadPage();
+                    }
+                });
             }
 
             function sendAjax(url, data) {
@@ -84,16 +104,22 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 });
             }
 
-            function dimControls() {
-                $('.btn, input, select, textarea').prop('disabled', true);
-            }
-
             $(document).ready(function () {
+
+                $('.btn-redis').click(function (event) {
+                    var prompt = $(this).attr('data-redis-danger');
+
+                    if (dangerPrompt === false || confirm(prompt)) {
+                        redis($(this).attr('data-redis-verb'), $(this).attr('data-redis-param0'))
+                    }
+                });
+
                 $('#btnRefresh').click(function () {
                     dimControls();
                     $('#btnRefreshIcon').addClass('glyphicon-refresh-animate');
                     window.location.href = @json(request()->getRequestUri());
                 });
+
                 if ("{{ (int) RedisTreeModel::option('tooltips') }}" === "1") {
                     $('[data-toggle="tooltip"]').tooltip();
                 } else {

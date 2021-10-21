@@ -100,16 +100,6 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
         }
 
         $(document).ready(function () {
-            $('.btn-danger').click(function () {
-                if (dangerPrompt === 1) {
-                    let key = $(this).attr('data-key');
-                    if (!confirm('Are you sure you want to delete this key?\n\n' + key)) {
-                        return false;
-                    }
-                }
-                sendAjax($(this).attr('data-cmd'));
-            });
-
             $('.panel-footer button').click(function () {
                 var base = '{{ addslashes($path) }}';
                 ajaxUpdate(base + $('.panel-footer input').val(), $('.panel-footer textarea').val());

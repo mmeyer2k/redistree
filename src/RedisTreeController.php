@@ -3,8 +3,10 @@
 namespace Mmeyer2k\RedisTree;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Predis\Collection\Iterator\Keyspace;
 
 class RedisTreeController extends Controller
@@ -103,12 +105,21 @@ class RedisTreeController extends Controller
         ]);
     }
 
+    public function redis(): JsonResponse
+    {
+        $verb = request('verb');
+
+        $resp = \Redis::$verb(request('param0'));
+
+        return response()->json($resp);
+    }
+
     public function postDeleteKey(string $key): void
     {
         \Redis::del($key);
     }
 
-    public function postOptions(): View
+    public function postOptions(): RedirectResponse
     {
         $opts = request('opts');
 
@@ -116,9 +127,12 @@ class RedisTreeController extends Controller
             $opts['separators'] = [];
         }
 
+        // Add update flag to session which will be pulled on next request
+        $opts['updated'] = true;
+
         session()->put(self::session, $opts);
 
-        return $this->getOptions();
+        return response()->redirectToRoute('mmeyer2k.redistree.options');
     }
 
     public function postOptionSet(): void
