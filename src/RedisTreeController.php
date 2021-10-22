@@ -12,6 +12,7 @@ use Predis\Collection\Iterator\Keyspace;
 class RedisTreeController extends Controller
 {
     const session = 'redistree';
+    const updated = 'redistree:updated:flag';
 
     public function getAbout(): View
     {
@@ -93,7 +94,9 @@ class RedisTreeController extends Controller
 
     public function getOptions(): View
     {
-        return view('redistree::options');
+        return view('redistree::options')->with([
+            'updated' => session()->pull(self::updated),
+        ]);
     }
 
     public function getStatistics(): View
@@ -127,10 +130,10 @@ class RedisTreeController extends Controller
             $opts['separators'] = [];
         }
 
-        // Add update flag to session which will be pulled on next request
-        $opts['updated'] = true;
-
         session()->put(self::session, $opts);
+
+        // Add update flag to session which will be pulled on next request
+        session()->put(self::updated, true);
 
         return response()->redirectToRoute('mmeyer2k.redistree.options');
     }

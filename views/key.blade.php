@@ -74,9 +74,8 @@
                     <td>
                         <textarea
                             id="txt-value"
-                            style="overflow: scroll; white-space: nowrap; width: 100%; height: 200px; resize: vertical;"
+                            style="overflow: scroll; width: 100%; height: 200px; resize: vertical;"
                             name="value"
-                            style="white-space: {{ $option('wordwrap') ? '' : '' }}"
                             class="monospace">{{ $data }}</textarea>
                         <button class="btn btn-primary" id="btn-save">
                             Save

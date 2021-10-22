@@ -27,6 +27,9 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             a:hover {
                 text-decoration: underline;
             }
+            textarea {
+                white-space: {{ $option('wordwrap') ? 'normal' : 'nowrap' }};
+            }
             .navbar {
                 margin-bottom: 0;
             }

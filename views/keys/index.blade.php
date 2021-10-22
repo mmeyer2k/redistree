@@ -1,8 +1,6 @@
 <?php
 
 use Mmeyer2k\RedisTree\RedisTreeModel;
-
-$controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 ?>
 @extends('redistree::layout')
 
@@ -11,6 +9,11 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 @section('content')
     <div class="panel panel-default">
         @include('redistree::keys.header', ['segs' => $segs, 'path' => $path])
+
+        @if ($size / $take > 1)
+            @include('redistree::keys.pager')
+        @endif
+
         <div id="divRowData" class="panel-body">
             @foreach ($keys as $key)
                 <div class="row">
@@ -93,7 +96,6 @@ $controller = '\Mmeyer2k\RedisTree\RedisTreeController';
 
 @section('tail')
     <script>
-
         function ajaxOptionSet(opt, val) {
             var data = 'opt=' + encodeURIComponent(opt) + '&val=' + encodeURIComponent(val);
             sendAjax('{!! route('mmeyer2k.redistree.option') !!}', data);

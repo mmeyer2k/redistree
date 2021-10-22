@@ -1,7 +1,3 @@
-<?php
-
-use Mmeyer2k\RedisTree\RedisTreeModel;
-?>
 @extends('redistree::layout')
 
 @section('title') RedisTree - Options @endsection
@@ -90,7 +86,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 <button class="btn btn-default btn-primary">
                     Save
                 </button>
-                @if (request()->method() === 'POST')
+                @if ($updated)
                     <span id="spanSaved" style="margin-left: 4px;" class="label label-success">
                         <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
                         Saved
