@@ -72,7 +72,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             </div>
             <div class="panel-body">
                 <div class="row">
-                    @foreach(\config('redistree.separators') as $sep)
+                    @foreach(config('redistree.separators') as $sep)
                         <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
                             <button type="button" class="btn btn-default toggleSep">
                                 {{ $sep }}
@@ -80,7 +80,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                             <input name="opts[separators][]"
                                    value="{{ $sep }}"
                                    type="checkbox"
-                                   {{ in_array($sep, RedisTreeModel::option('separators')) ? 'CHECKED' : '' }}
+                                   {{ in_array($sep, $option('separators')) ? 'CHECKED' : '' }}
                                    data-reverse>
                         </div>
                     @endforeach
