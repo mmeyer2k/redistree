@@ -28,7 +28,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <h1 class="monospace" style="margin-left: 8px;">
+        <h2 class="monospace" style="margin-left: 8px;">
             {{ $key }}
             <div style="float: right; padding-right: 10px;">
                 <button class="btn btn-default">Rename</button>
@@ -39,7 +39,7 @@
                     Delete
                 </button>
             </div>
-        </h1>
+        </h2>
         <hr>
         <table class="table">
             <tr>
@@ -59,7 +59,13 @@
             <tr>
                 <th>Time to live</th>
                 <td>
-                    {!! $ttl === -1 ? 'forever' : now()->addSeconds($ttl)->diffForHumans() !!}
+                    {{ $ttl }}
+                </td>
+            </tr>
+            <tr>
+                <th>Time to live (human)</th>
+                <td>
+                    {{ $ttl === -1 ? 'forever' : now()->addSeconds($ttl)->diffForHumans() }}
                 </td>
             </tr>
             @if ($type === 'string')
