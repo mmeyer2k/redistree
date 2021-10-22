@@ -9,7 +9,6 @@
             <div class="panel-heading" style="padding: 6px;">
                 <i class="fa fa-bell" aria-hidden="true"></i>
                 Changes on this page will only affect your current session.
-                <a href="#">OK</a>
             </div>
             <div class="panel-heading">
                 <h3>

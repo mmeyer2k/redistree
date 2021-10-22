@@ -23,7 +23,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
         @endforeach
     @endif
 
-    <form style="width: 140px; display: inline-block;">
+    <form style="width: 150px; display: inline-block;">
         <input name="node" type="text" class="form-control input-sm" placeholder="Jump to namespace">
     </form>
 
@@ -53,7 +53,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 data-placement="bottom"
                 title="Refresh current view"
                 class="btn btn-default btn-sm">
-            <span id="btnRefreshIcon" class="glyphicon glyphicon-refresh"></span>
+            <span id="btnRefreshIcon" class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
         </button>
     </div>
 </div>
