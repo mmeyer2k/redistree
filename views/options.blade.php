@@ -8,6 +8,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 
 @section('content')
     <form id="formOptions" action="{{ route('mmeyer2k.redistree.options') }}" method="POST">
+        @csrf
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3>
