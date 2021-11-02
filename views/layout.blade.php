@@ -1,7 +1,4 @@
-<?php
-
-use Mmeyer2k\RedisTree\RedisTreeModel;
-?><!doctype html>
+<!doctype html>
 <html>
     <head>
         <title>@yield('title')</title>
@@ -27,6 +24,9 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             a:hover {
                 text-decoration: underline;
             }
+            textarea {
+                white-space: {{ $option('wordwrap') ? 'normal' : 'nowrap' }};
+            }
             .navbar {
                 margin-bottom: 0;
             }
@@ -48,7 +48,8 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
         </style>
 
         <script>
-            var dangerPrompt = @json((int)RedisTreeModel::option('danger_prompt'))
+            let dangerPrompt = @json((int)$option('danger_prompt'));
+            let tooltips = @json((int) $option('tooltips'));
 
             $.ajaxSetup({
                 headers: {
@@ -69,7 +70,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
 
         <script>
             function reloadPage() {
-                window.location.href = @json($_SERVER["REQUEST_URI"]);
+                window.location.href = @json(request()->getRequestUri());
             }
 
             function sendAjax(url, data) {
@@ -92,9 +93,9 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                 $('#btnRefresh').click(function () {
                     dimControls();
                     $('#btnRefreshIcon').addClass('glyphicon-refresh-animate');
-                    window.location.href = '{{ $_SERVER["REQUEST_URI"] }}';
+                    reloadPage();
                 });
-                if ("{{ (int) RedisTreeModel::option('tooltips') }}" === "1") {
+                if (tooltips) {
                     $('[data-toggle="tooltip"]').tooltip();
                 } else {
                     $('[data-toggle="tooltip"]').removeAttr('title');

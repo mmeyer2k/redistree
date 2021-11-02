@@ -40,13 +40,16 @@
                 <td>{{ $type }}</td>
             </tr>
             <tr>
-                <th>Size ({!! $len !!})</th>
-                <td>{{ \Redis::$len($key) }}</td>
+                <th>
+                    Size
+                    (<a href="https://redis.io/commands/{{ $len }}" target="_blank">{{ $len }} <i class="fa fa-external-link" aria-hidden="true"></i></a>)
+                </th>
+                <td>{{ Redis::$len($key) }}</td>
             </tr>
             <tr>
                 <th>Time to live</th>
                 <td>
-                    {!! $ttl === -1 ? 'forever' : now()->addSeconds($ttl)->diffForHumans() !!}
+                    {{ $ttl }} ({{ $ttl === -1 ? 'forever' : now()->addSeconds($ttl)->diffForHumans() }})
                 </td>
             </tr>
             @if ($type === 'string')
@@ -55,7 +58,7 @@
                     <td>
                         <textarea
                             id="txt-value"
-                            style="overflow: scroll; white-space: nowrap; width: 100%; height: 200px; resize: vertical;"
+                            style="overflow: scroll; width: 100%; height: 200px; resize: vertical;"
                             name="value"
                             class="monospace">{{ $data }}</textarea>
                         <button class="btn btn-primary" id="btn-save">

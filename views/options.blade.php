@@ -1,7 +1,3 @@
-<?php
-
-use Mmeyer2k\RedisTree\RedisTreeModel;
-?>
 @extends('redistree::layout')
 
 @section('title') RedisTree - Options @endsection
@@ -23,25 +19,39 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                         <input name="opts[danger_prompt]"
                                value="1"
                                type="checkbox"
-                               {{ RedisTreeModel::option('danger_prompt') ? 'CHECKED' : '' }}
+                               {{ $option('danger_prompt') ? 'CHECKED' : '' }}
                                data-reverse>
                     </div>
                     <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
                         Prompt user for confirmation before performing dangerous actions?
                     </div>
                 </div>
-                <br>
+                <hr>
                 <div class="row">
                     <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
                         <input type="hidden" name="opts[tooltips]" value="0">
                         <input name="opts[tooltips]"
                                value="1"
                                type="checkbox"
-                               {{ RedisTreeModel::option('tooltips') ? 'CHECKED' : '' }}
+                               {{ $option('tooltips') ? 'CHECKED' : '' }}
                                data-reverse>
                     </div>
                     <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
                         Enable interface tool tips.
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                        <input type="hidden" name="opts[wordwrap]" value="0">
+                        <input name="opts[wordwrap]"
+                               value="1"
+                               type="checkbox"
+                               {{ $option ? 'CHECKED' : '' }}
+                               data-reverse>
+                    </div>
+                    <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">
+                        Wrap long lines in text areas?
                     </div>
                 </div>
             </div>
@@ -53,7 +63,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             </div>
             <div class="panel-body">
                 <div class="row">
-                    @foreach(\config('redistree.separators') as $sep)
+                    @foreach(config('redistree.separators') as $sep)
                         <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
                             <button type="button" class="btn btn-default toggleSep">
                                 {{ $sep }}
@@ -61,7 +71,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
                             <input name="opts[separators][]"
                                    value="{{ $sep }}"
                                    type="checkbox"
-                                   {{ in_array($sep, RedisTreeModel::option('separators')) ? 'CHECKED' : '' }}
+                                   {{ in_array($sep, $option('separators')) ? 'CHECKED' : '' }}
                                    data-reverse>
                         </div>
                     @endforeach
@@ -96,7 +106,6 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
             text-align: center;
             margin-bottom: 30px;
         }
-
         .col-xs-12 > button {
             background-color: #eeeeee;
             font-weight: bolder;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mmeyer2k\RedisTree;
 
 class RedisTreeModel
@@ -92,15 +94,9 @@ class RedisTreeModel
 
     public static function option(string $opt)
     {
-        $ses = RedisTreeController::session;
+        $key = RedisTreeController::session;
 
-        if (session()->has($ses)) {
-            $opts = session()->get($ses);
-
-            return $opts[$opt];
-        }
-
-        return config("$ses.$opt");
+        return session($key)[$opt] ?? config("$key.$opt");
     }
 
     public static function redisEscape(string $str): string

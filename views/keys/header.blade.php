@@ -1,7 +1,3 @@
-<?php
-
-use Mmeyer2k\RedisTree\RedisTreeModel;
-?>
 <div class="panel-heading">
     <a data-toggle="tooltip"
        data-placement="bottom"
@@ -28,7 +24,7 @@ use Mmeyer2k\RedisTree\RedisTreeModel;
     </form>
 
     <div style="float: right;">
-        @if (!RedisTreeModel::option('danger_prompt'))
+        @if (!$option('danger_prompt'))
             <button
                     data-toggle="tooltip"
                     data-placement="bottom"

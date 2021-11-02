@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mmeyer2k\RedisTree;
 
 use App\Http\Controllers\Controller;
