@@ -6,16 +6,18 @@ It assists you in monitoring your server statistics and exploring your Redis key
 
 **Requires PHP 7.3+**
 
-## Install
+## Installation
 ### Add to Composer
 ```
 composer require "mmeyer2k/redistree:dev-master"
 ```
+
 ### Add Service Provider
-Add the following line into the 'providers' array in `config/app.php`
+Add the following line into the `providers` array in `config/app.php`
 ```php
 Mmeyer2k\RedisTree\RedisTreeServiceProvider::class,
 ```
+
 ### Add Routes
 To allow for full customization of the URL and security mechanisms employed, routing to the RedisTree controller is left to the developer.
 To serve the GUI from `/redistree` **without any kind of security**, add the following stub to your `routes.php` file.
