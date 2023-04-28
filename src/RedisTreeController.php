@@ -68,6 +68,10 @@ class RedisTreeController extends Controller
     {
         $type = (string)\Redis::type($key);
 
+        if ($type === 'none') {
+            return view('redistree::notfound', ['key' => $key]);
+        }
+
         $len = [
             'string' => 'strlen',
             'list' => 'llen',
