@@ -2,13 +2,14 @@
 <html>
     <head>
         <title>@yield('title')</title>
+        <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <link rel="icon" type="image/png" href="//cdn.rawgit.com/mmeyer2k/redistree/master/assets/favicon.ico">
+        <link rel="icon" type="image/png" href="{!! \route('mmeyer2k.redistree.favicon') !!}">
         <meta name="google" value="notranslate">
 
         <style>
