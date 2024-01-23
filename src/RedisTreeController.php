@@ -17,6 +17,13 @@ class RedisTreeController extends Controller
         return view('redistree::about');
     }
 
+    public function getFavicon()
+    {
+        $icon = file_get_contents(__DIR__ . '/../assets/favicon.ico');
+
+        return response($icon)->header('Content-Type', 'image/ico');
+    }
+
     public function getIndex(): View
     {
         // Find filter path and decode it

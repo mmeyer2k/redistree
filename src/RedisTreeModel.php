@@ -12,6 +12,7 @@ class RedisTreeModel
             \Route::get('/', [RedisTreeController::class, "getIndex"])->name('mmeyer2k.redistree.index');
             \Route::get('about', [RedisTreeController::class, "getAbout"])->name('mmeyer2k.redistree.about');
             \Route::get('stats', [RedisTreeController::class, "getStatistics"])->name('mmeyer2k.redistree.stats');
+            \Route::get('favicon', [RedisTreeController::class, "getFavicon"])->name('mmeyer2k.redistree.favicon');
             \Route::get('options', [RedisTreeController::class, "getOptions"])->name('mmeyer2k.redistree.options');
             \Route::get('key/{key}', [RedisTreeController::class, "getKey"])->name('mmeyer2k.redistree.key');
             \Route::post('options', [RedisTreeController::class, "postOptions"]);
