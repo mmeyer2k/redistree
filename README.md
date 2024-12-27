@@ -8,7 +8,7 @@ It assists you in monitoring your server statistics and exploring your Redis key
 
 ## Installation
 ### Add to Composer
-```
+```bash
 composer require "mmeyer2k/redistree:dev-master"
 ```
 
