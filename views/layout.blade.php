@@ -46,6 +46,9 @@
                 from { transform: scale(1) rotate(0deg);}
                 to { transform: scale(1) rotate(360deg);}
             }
+            .panel {
+                margin-bottom: 0px;
+            }
         </style>
 
         <script>
